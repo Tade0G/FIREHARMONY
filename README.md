@@ -115,13 +115,9 @@ El flujo de trabajo propuesto para la plataforma es:
      Integración de registros
              |
       Motor de análisis
-             |
-      +------+------+
-            
-       Aplicación     
-       interactiva   
-                   
-      +------+------+
+             |  
+        Aplicación     
+        interactiva     
              |
      Visualización y análisis
 ```
