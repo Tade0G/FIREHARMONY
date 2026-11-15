@@ -178,7 +178,7 @@ It aims to combine satellite observation, data science, and interactive visualiz
 
 📍 Santiago del Estero, Argentina.
 
-## 🔗 Official sources
+## 🔗 Official sources 
 
 - [NASA FIRMS](https://firms.modaps.eosdis.nasa.gov/)
 - [NASA Earthdata](https://www.earthdata.nasa.gov/)
