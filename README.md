@@ -86,7 +86,7 @@ La propuesta de 🔥 FIREHARMONY contempla:
 | Tecnología | Aplicación |
 |---|---|
 | Python | Procesamiento y análisis de datos. |
-| Streamlit | Desarrollo del panel analítico. |
+| METEOMÁTICA | API meteorológica. |
 | Pandas | Manipulación y preparación de datos. |
 | Plotly | Visualizaciones interactivas. |
 | Leaflet | Visualización cartográfica. |
@@ -117,10 +117,10 @@ El flujo de trabajo propuesto para la plataforma es:
       Motor de análisis
              |
       +------+------+
-      |             |
-  Aplicación      Dashboard
-  interactiva     Streamlit
-      |             |
+            
+       Aplicación     
+       interactiva   
+                   
       +------+------+
              |
      Visualización y análisis
@@ -185,6 +185,7 @@ Busca combinar observación satelital, ciencia de datos y visualización interac
 - [NASA Earthdata](https://www.earthdata.nasa.gov/)
 - [NASA MODIS](https://modis.gsfc.nasa.gov/)
 - [NASA VIIRS](https://www.nesdis.noaa.gov/our-satellites/joint-polar-satellite-system)
+- 
 
 ---
 
