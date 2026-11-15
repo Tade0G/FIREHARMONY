@@ -86,7 +86,7 @@ La propuesta de 🔥 FIREHARMONY contempla:
 | Tecnología | Aplicación |
 |---|---|
 | Python | Procesamiento y análisis de datos. |
-| METEOMÁTICA | API meteorológica. |
+| METEOMATICS | API meteorológica. |
 | Pandas | Manipulación y preparación de datos. |
 | Plotly | Visualizaciones interactivas. |
 | Leaflet | Visualización cartográfica. |

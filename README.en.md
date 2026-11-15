@@ -86,6 +86,7 @@ The 🔥 FIREHARMONY project envisions:
 | Technology | Use |
 |---|---|
 | Python | Data processing and analysis. |
+| meteomatics | weather API
 | Streamlit | Analytical dashboard development. |
 | Pandas | Data manipulation and preparation. |
 | Plotly | Interactive visualizations. |
@@ -115,13 +116,10 @@ The proposed platform workflow is:
       Record integration
              |
        Analysis engine
+             |      
+        Interactive
              |
-      +------+------+
-      |             |
- Interactive     Streamlit
- application     dashboard
-      |             |
-      +------+------+
+        Application
              |
    Visualization and analysis
 ```
