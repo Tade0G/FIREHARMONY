@@ -249,14 +249,17 @@
         <div class="pt">
           <button type="button" class="acc-toggle" aria-expanded="false" aria-controls="accChartBody">
             <span class="acc-title" data-en="📈 MONTHLY ACTIVITY">📈 ACTIVIDAD POR MES</span>
-            <span id="chartYear">—</span>
             <i class="chev" aria-hidden="true"></i>
           </button>
         </div>
         <div class="acc-body" id="accChartBody">
           <div class="content">
+            <label class="chart-year">
+              <span data-en="Year">Año</span>
+              <select id="chartYear" aria-label="Año" data-en-aria-label="Year"></select>
+            </label>
             <div class="chart" id="monthlyChart"></div>
-            <div class="hint" data-en="Detection count; this does not necessarily equal the number of unique fires.">Conteo de detecciones; no equivale necesariamente al número de incendios únicos.</div>
+            <div class="hint" data-en="Monthly sums of detections from the available historical CSV files. MODIS and VIIRS filters apply; counts do not necessarily equal unique fires.">Suma mensual de detecciones en los CSV históricos disponibles. Aplican los filtros MODIS y VIIRS; el conteo no equivale necesariamente a incendios únicos.</div>
           </div>
         </div>
       </section>

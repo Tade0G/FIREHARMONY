@@ -426,7 +426,7 @@ function render() {
         "No records match these filters. Try another period or sensor, or import a CSV.",
       );
   renderCalendar();
-  renderChart(arr);
+  renderChart();
   $("mapInfo").innerHTML =
     `<strong>🔥 ${tr("{count} detecciones visibles", "{count} visible detections", { count: arr.length })}</strong><br>MODIS: ${m} · VIIRS: ${v}<br>${hasDemo ? tr("Modo demostración / datos mixtos", "Demo mode / mixed data") : origin === "NASA" ? "NASA FIRMS" : origin === "CSV" ? tr("Datos importados", "Imported data") : tr("Sin datos", "No data")}<br>${tr("Elegí un punto para ver detalles.", "Select a point to see details.")}`;
 }
@@ -555,6 +555,7 @@ async function fetchCalendarSummary() {
         "El servidor devolvió un resumen con formato inválido.",
       );
     calendarSummary = data;
+    renderChart();
     setLocalizedText(
       $("calendarStatus"),
       "CSV históricos · {count} resúmenes diarios · MODIS y VIIRS",
@@ -564,6 +565,7 @@ async function fetchCalendarSummary() {
     renderCalendar();
   } catch (error) {
     calendarSummary = null;
+    renderChart();
     setLocalizedText(
       $("calendarStatus"),
       `No se pudo cargar la actividad histórica: ${error.message}`,
@@ -573,12 +575,42 @@ async function fetchCalendarSummary() {
   }
 }
 
-function renderChart(arr) {
-  const year = 2025,
-    counts = Array(12).fill(0);
-  arr.forEach((r) => {
-    const d = normDate(r.acq_date || r.date);
-    if (d && d.startsWith(String(year) + "-")) counts[+d.slice(5, 7) - 1]++;
+function renderChart() {
+  const yearSelect = $("chartYear"),
+    years = Array.from(
+      new Set(
+        (calendarSummary || [])
+          .map((r) => Number(r.year))
+          .filter((year) => Number.isInteger(year) && year > 0),
+      ),
+    ).sort((a, b) => b - a),
+    currentYear = Number(yearSelect.value);
+  yearSelect.innerHTML = years
+    .map((year) => `<option value="${year}">${year}</option>`)
+    .join("");
+  if (years.includes(currentYear)) yearSelect.value = String(currentYear);
+  else if (years.length) yearSelect.value = String(years[0]);
+  yearSelect.disabled = years.length < 2;
+
+  const year = Number(yearSelect.value),
+    counts = Array(12).fill(0),
+    useModis = $("modis").checked,
+    useViirs = $("viirs").checked;
+  (calendarSummary || []).forEach((r) => {
+    if (Number(r.year) !== year) return;
+    const sensor = sensorName(r),
+      month = Number(r.month) - 1,
+      count = Number(r.cantidad_hotspots);
+    if (sensor.includes("MODIS") && !useModis) return;
+    if (sensor.includes("VIIRS") && !useViirs) return;
+    if (
+      !Number.isInteger(month) ||
+      month < 0 ||
+      month >= counts.length ||
+      !Number.isFinite(count)
+    )
+      return;
+    counts[month] += count;
   });
   const max = Math.max(1, ...counts);
   $("chartYear").textContent = year;
@@ -1042,6 +1074,7 @@ $("calendar").addEventListener("click", (event) => {
   const day = event.target.closest("button[data-date]");
   if (day) showHistoricalDay(day.dataset.date);
 });
+$("chartYear").addEventListener("change", renderChart);
 ["modis", "viirs", "confidence"].forEach((id) =>
   $(id).addEventListener("change", render),
 );

@@ -1,5 +1,5 @@
 from __future__ import annotations
-import csv, io, os, math
+import csv, glob, io, os, math
 from datetime import date, timedelta
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request, render_template
@@ -22,12 +22,20 @@ SOURCES = {
 }
 ARGENTINA_BBOX = "-73.6,-55.1,-53.6,-21.8"
 
-MODIS_2025_ARGENTINA = os.path.join(
-    APP_DIR, "data", "modis", "modis_2025_Argentina.csv"
-)
-VIIRS_2025_ARGENTINA = os.path.join(
-    APP_DIR, "data", "viirs", "viirs-jpss1_2025_Argentina.csv"
-)
+
+def historical_data_files():
+    patterns = (
+        ("MODIS", os.path.join(APP_DIR, "data", "modis", "modis_*_Argentina.csv")),
+        (
+            "VIIRS",
+            os.path.join(APP_DIR, "data", "viirs", "viirs-*_Argentina.csv"),
+        ),
+    )
+    return [
+        (sensor, path)
+        for sensor, pattern in patterns
+        for path in sorted(glob.glob(pattern))
+    ]
 
 
 @app.get("/")
@@ -263,10 +271,7 @@ def fires_today():
 @app.get("/api/fires/summary")
 def summary():
     resumenes = []
-    for sensor, ruta_csv in (
-        ("MODIS", MODIS_2025_ARGENTINA),
-        ("VIIRS", VIIRS_2025_ARGENTINA),
-    ):
+    for sensor, ruta_csv in historical_data_files():
         resumen = procesar_datos_fuegos(ruta_csv)
         resumen["sensor"] = sensor
         resumenes.extend(resumen.to_dict(orient="records"))
@@ -285,10 +290,7 @@ def historical_records():
 
     records = []
     columns = ["latitude", "longitude", "acq_date", "satellite", "confidence", "frp"]
-    for sensor, ruta_csv in (
-        ("MODIS", MODIS_2025_ARGENTINA),
-        ("VIIRS", VIIRS_2025_ARGENTINA),
-    ):
+    for sensor, ruta_csv in historical_data_files():
         df = pd.read_csv(ruta_csv, usecols=columns)
         df["acq_date"] = pd.to_datetime(df["acq_date"], errors="coerce").dt.strftime(
             "%Y-%m-%d"
