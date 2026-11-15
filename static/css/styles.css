@@ -1,0 +1,1175 @@
+/* =========================================================
+   TrEs-2B · FireHarmony — estilos responsive
+   Breakpoints:
+     > 1180px   escritorio: 3 columnas (filtros | mapa | resumen)
+     861–1180   tablet: 2 columnas, resumen y paneles inferiores debajo
+     ≤ 860px    móvil/tablet vertical: 1 columna + menús expandibles
+     ≤ 600px    móvil: ajustes finos del mapa y textos
+     ≤ 380px    móviles muy angostos
+   ========================================================= */
+
+:root {
+  --bg: #090d14;
+  --panel: #111925;
+  --panel2: #0c131e;
+  --border: #273547;
+  --text: #edf3fa;
+  --muted: #94a4b8;
+  --orange: #ff8b42;
+  --red: #ff554d;
+  --yellow: #ffd166;
+  --blue: #63b3ed;
+  --green: #65d6a0;
+
+  --gap: 9px;
+  --tap: 40px; /* alto mínimo de botones y campos */
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+}
+
+/* En pantallas táctiles, zonas de toque más grandes (recomendación 44px) */
+@media (pointer: coarse) {
+  :root {
+    --tap: 44px;
+  }
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font:
+    14px/1.4 Inter,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+  overflow-x: hidden;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+
+/* ---------- Layout principal (escritorio) ---------- */
+
+.app {
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: max(9px, env(safe-area-inset-top)) max(9px, env(safe-area-inset-right))
+    max(9px, env(safe-area-inset-bottom)) max(9px, env(safe-area-inset-left));
+  display: grid;
+  align-content: start;
+  gap: var(--gap);
+  grid-template-columns:
+    clamp(250px, 20vw, 310px)
+    minmax(0, 1fr)
+    clamp(260px, 21vw, 320px);
+  grid-template-rows: auto clamp(520px, 72vh, 820px) auto;
+  grid-template-areas:
+    "head head head"
+    "left map right"
+    "bottom bottom bottom";
+}
+
+header,
+.panel,
+.maparea,
+.bp {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+header {
+  grid-area: head;
+  min-height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.brand > div:last-child {
+  min-width: 0;
+}
+
+.logo {
+  font-size: 24px;
+  line-height: 1;
+  padding: 9px;
+  background: #382116;
+  border: 1px solid #684025;
+  border-radius: 9px;
+  flex: none;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 17px;
+  letter-spacing: 1.2px;
+  color: #ffb16d;
+}
+
+.brand small {
+  display: block;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  margin-top: 4px;
+}
+
+.statuspill {
+  border: 1px solid #704a2c;
+  background: #24180f;
+  color: #ffc18b;
+  border-radius: 20px;
+  padding: 7px 11px;
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.language-toggle {
+  min-width: 38px;
+  min-height: 34px;
+  padding: 5px 8px;
+  border: 1px solid #46566b;
+  border-radius: 6px;
+  background: #172333;
+  color: var(--text);
+  font-size: var(--fs-xs);
+  font-weight: 800;
+}
+
+.language-toggle:hover {
+  border-color: var(--orange);
+}
+
+.left {
+  grid-area: left;
+  overflow: auto;
+  min-height: 0;
+}
+
+.right {
+  grid-area: right;
+  overflow: auto;
+  min-height: 0;
+}
+
+.left,
+.right,
+.bp {
+  scrollbar-width: thin;
+  scrollbar-color: #344357 transparent;
+}
+
+/* ---------- Secciones y menús expandibles ----------
+   En escritorio/tablet todo se ve abierto y el botón del título es inerte.
+   En ≤860px el título se vuelve un botón que abre/cierra el contenido. */
+
+.acc + .acc {
+  border-top: 1px solid var(--border);
+}
+
+.pt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  letter-spacing: 0.45px;
+  color: #ffb16d;
+}
+
+.acc-toggle {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 11px 0;
+  margin: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: left;
+  cursor: default;
+}
+
+.acc-toggle:disabled {
+  color: inherit;
+  opacity: 1;
+}
+
+.acc-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.chev {
+  display: none;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin: -4px 2px 0 4px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.2s, margin 0.2s;
+}
+
+.acc.open .chev {
+  margin-top: 3px;
+  transform: rotate(-135deg);
+}
+
+.sec {
+  padding: 11px 12px;
+}
+
+.label {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #344357;
+  background: #0a111b;
+  color: var(--text);
+}
+
+input:focus,
+select:focus {
+  outline: 1px solid var(--orange);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.gap {
+  height: 9px;
+}
+
+.btn {
+  min-height: 34px;
+  padding: 8px 10px;
+  border: 1px solid #46566b;
+  background: #172333;
+  color: var(--text);
+  border-radius: 6px;
+  font-size: var(--fs-sm);
+}
+
+.btn:hover {
+  filter: brightness(1.2);
+}
+
+.primary {
+  background: #713b1d;
+  border-color: #a45a2b;
+}
+
+.full {
+  width: 100%;
+}
+
+.btnrow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.checkrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fs-sm);
+  margin: 8px 0;
+  color: #d6e0ed;
+}
+
+.checkrow input {
+  width: auto;
+  accent-color: var(--orange);
+}
+
+/* ---------- Mapa ---------- */
+
+.maparea {
+  grid-area: map;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+  background: #17202b;
+}
+
+/* right:62px deja libre el botón de capas de Leaflet (arriba a la derecha) */
+.overlay {
+  position: absolute;
+  z-index: 800;
+  top: 10px;
+  left: 10px;
+  right: 62px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.overlay > * {
+  pointer-events: auto;
+}
+
+.leaflet-top.leaflet-left {
+  top: 40%;
+}
+
+.search {
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  width: min(340px, 58%);
+  background: #0a111bef;
+  border: 1px solid #3b4b60;
+  border-radius: 7px;
+}
+
+.search input {
+  border: 0;
+  background: transparent;
+  min-width: 0;
+}
+
+.search button {
+  background: #713b1d;
+  border: 1px solid #a45a2b;
+  border-radius: 5px;
+  color: white;
+  padding: 0 12px;
+  min-height: 34px;
+}
+
+.mapinfo {
+  background: #0a111bef;
+  border: 1px solid #3b4b60;
+  border-radius: 7px;
+  padding: 9px 11px;
+  font-size: var(--fs-xs);
+  line-height: 1.6;
+  max-width: 240px;
+}
+
+.mapinfo strong {
+  color: #ffb16d;
+}
+
+.legend {
+  position: absolute;
+  z-index: 800;
+  bottom: 10px;
+  left: 10px;
+  padding: 9px 11px;
+  background: #0a111bef;
+  border: 1px solid #3b4b60;
+  border-radius: 7px;
+  font-size: var(--fs-xs);
+  line-height: 1.9;
+}
+
+.legend div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.legend div:last-child {
+  font-size: 10px !important;
+  line-height: 1.5;
+  margin-top: 2px;
+}
+
+.legend i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  flex: none;
+}
+
+.maptools {
+  position: absolute;
+  z-index: 800;
+  bottom: 24px;
+  right: 10px;
+  display: flex;
+  gap: 5px;
+}
+
+.maptools button {
+  width: 36px;
+  height: 36px;
+  background: #0a111bef;
+  border: 1px solid #3b4b60;
+  border-radius: 6px;
+  color: white;
+}
+
+/* ---------- Panel de resumen ---------- */
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  padding: 10px 12px;
+}
+
+.metric {
+  padding: 10px;
+  border: 1px solid #28384a;
+  background: var(--panel2);
+  border-radius: 7px;
+  min-width: 0;
+}
+
+.metric small {
+  display: block;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+}
+
+.metric strong {
+  display: block;
+  font-size: 19px;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+}
+
+.metric .sub {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.source {
+  display: flex;
+  justify-content: space-between;
+  gap: 7px;
+  padding: 9px;
+  margin: 0 12px 7px;
+  border: 1px solid #28384a;
+  border-radius: 6px;
+  background: var(--panel2);
+  font-size: var(--fs-xs);
+}
+
+.demo {
+  color: var(--yellow);
+}
+
+.ok {
+  color: var(--green);
+}
+
+.risk {
+  margin: 9px 12px;
+  padding: 10px;
+  border: 1px solid #344357;
+  border-radius: 7px;
+  background: var(--panel2);
+  font-size: var(--fs-xs);
+}
+
+.riskhead {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.bar {
+  height: 7px;
+  background: #253142;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  width: 0;
+  transition: width 0.3s;
+  background: var(--orange);
+}
+
+.note,
+.notice {
+  font-size: var(--fs-xs);
+  line-height: 1.55;
+  color: #bdc9d8;
+  background: #171d25;
+  border-left: 3px solid var(--orange);
+  margin: 9px 12px;
+  padding: 9px;
+}
+
+.notice {
+  margin: 0;
+  padding: 8px;
+}
+
+/* En tablet el resumen pasa a 2 columnas (ver media query) */
+.sumgrid {
+  display: block;
+}
+
+/* ---------- Paneles inferiores ---------- */
+
+.bottom {
+  grid-area: bottom;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.05fr)
+    minmax(0, 1.2fr)
+    minmax(0, 1fr);
+  gap: var(--gap);
+  min-height: 0;
+}
+
+.bp {
+  overflow: auto;
+  min-width: 0;
+}
+
+.content {
+  padding: 11px 12px;
+}
+
+.chart {
+  display: flex;
+  align-items: end;
+  gap: 6px;
+  height: 112px;
+  padding: 8px 4px 0;
+  border-bottom: 1px solid #344357;
+}
+
+.chartcol {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: center;
+  gap: 5px;
+}
+
+.chartbar {
+  width: 70%;
+  min-width: 6px;
+  max-width: 28px;
+  background: linear-gradient(180deg, #ffb16d, #e85b36);
+  border-radius: 4px 4px 0 0;
+  min-height: 2px;
+}
+
+.chartcol span {
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.chartcol small {
+  font-size: 9px;
+  color: #dbe4ef;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.calendarhead {
+  gap: 8px;
+}
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+
+.calendar-nav span {
+  min-width: 64px;
+  text-align: center;
+}
+
+.calendar-nav-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid #344357;
+  border-radius: 4px;
+  background: #0a111b;
+  color: #dbe4ef;
+  cursor: pointer;
+}
+
+.calendar-nav-btn:hover {
+  border-color: #ffb16d;
+}
+
+.calendar-status {
+  min-height: 14px;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+}
+
+.day {
+  background: #0a111b;
+  border: 1px solid #273547;
+  border-radius: 4px;
+  min-height: 34px;
+  min-width: 0;
+  padding: 4px;
+  font-size: var(--fs-sm);
+  color: #bdc9d8;
+  position: relative;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+/* El script escribe font-size:8px en línea; se pisa para que sea legible */
+.day span {
+  font-size: 10px !important;
+}
+
+.day.selected-day {
+  outline: 2px solid #ffb16d;
+  outline-offset: 1px;
+}
+
+.day.hot {
+  background: #5d2b1c;
+  border-color: #a44c2b;
+  color: #fff;
+}
+
+.day.veryhot {
+  background: #a52f28;
+  border-color: #ff6b52;
+  color: #fff;
+}
+
+.dayhead {
+  font-size: 10px;
+  color: var(--muted);
+  text-align: center;
+  padding: 2px;
+}
+
+.sourcegrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 7px;
+}
+
+.sourcecard {
+  background: #0a111b;
+  border: 1px solid #28384a;
+  border-radius: 6px;
+  padding: 9px;
+  font-size: var(--fs-xs);
+}
+
+.sourcecard strong {
+  font-size: var(--fs-sm);
+  color: #e9f1fa;
+}
+
+.sourcecard p {
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 5px 0 0;
+}
+
+.hint {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* ---------- Modal ---------- */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: #000b;
+  align-items: center;
+  justify-content: center;
+  padding: max(15px, env(safe-area-inset-top)) max(15px, env(safe-area-inset-right))
+    max(15px, env(safe-area-inset-bottom)) max(15px, env(safe-area-inset-left));
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modalcard {
+  width: min(600px, 100%);
+  max-height: 90vh;
+  max-height: 90dvh;
+  overflow: auto;
+  background: var(--panel);
+  border: 1px solid #4c5f76;
+  border-radius: 10px;
+}
+
+.modalhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 6px 6px 13px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--panel);
+}
+
+.modalbody {
+  padding: 13px;
+  line-height: 1.55;
+}
+
+.close {
+  min-width: 40px;
+  min-height: 40px;
+  background: none;
+  border: 0;
+  color: white;
+  font-size: 24px;
+  line-height: 1;
+}
+
+/* ---------- Leaflet (tema oscuro) ---------- */
+
+.leaflet-control-layers {
+  background: #0a111b !important;
+  color: #e2eaf4 !important;
+  border: 1px solid #3b4b60 !important;
+}
+
+.leaflet-control-layers label {
+  color: #e2eaf4;
+}
+
+.leaflet-bar a {
+  background: #111925 !important;
+  color: #e2eaf4 !important;
+  border-color: #3b4b60 !important;
+}
+
+/* =========================================================
+   TABLET: 861–1180px
+   ========================================================= */
+@media (max-width: 1180px) {
+  .app {
+    grid-template-columns: clamp(240px, 32vw, 300px) minmax(0, 1fr);
+    grid-template-rows: auto clamp(480px, 64vh, 720px) auto auto;
+    grid-template-areas:
+      "head head"
+      "left map"
+      "right right"
+      "bottom bottom";
+  }
+
+  .right {
+    overflow: visible;
+  }
+
+  .bottom {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bottom .bp:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Resumen en 2 columnas cuando ocupa todo el ancho */
+@media (min-width: 600px) and (max-width: 1180px) {
+  .sumgrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sumgrid .sumcol + .sumcol {
+    border-left: 1px solid #202d3d;
+  }
+}
+
+/* =========================================================
+   MÓVIL / TABLET VERTICAL: ≤ 860px  → 1 columna + acordeones
+   ========================================================= */
+@media (max-width: 860px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto auto;
+    grid-template-areas:
+      "head"
+      "map"
+      "left"
+      "right"
+      "bottom";
+    padding: max(6px, env(safe-area-inset-top)) max(6px, env(safe-area-inset-right))
+      max(6px, env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-left));
+    gap: 7px;
+  }
+
+  header {
+    padding: 8px 12px;
+  }
+
+  /* El mapa va primero y ocupa una altura cómoda */
+  .maparea {
+    height: clamp(320px, 60vh, 560px);
+  }
+
+  @supports (height: 1svh) {
+    .maparea {
+      height: clamp(320px, 60svh, 560px);
+    }
+  }
+
+  .left,
+  .right {
+    overflow: visible;
+  }
+
+  .bottom {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .bottom .bp:last-child {
+    grid-column: auto;
+  }
+
+  /* Menús expandibles */
+  .acc-toggle {
+    cursor: pointer;
+    min-height: var(--tap);
+    padding: 0;
+  }
+
+  .chev {
+    display: block;
+  }
+
+  .acc:not(.open) .acc-body,
+  .acc:not(.open) .calendar-nav {
+    display: none;
+  }
+
+  .acc:not(.open) > .pt {
+    border-bottom: 0;
+  }
+
+  .pt {
+    font-size: var(--fs-sm);
+  }
+
+  /* La caja de info del mapa se compacta; tocarla la expande */
+  .mapinfo {
+    max-height: 58px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .mapinfo.expanded {
+    max-height: none;
+  }
+
+  .day {
+    min-height: 40px;
+  }
+}
+
+/* =========================================================
+   MÓVIL: ≤ 600px
+   ========================================================= */
+@media (max-width: 600px) {
+  .hide-sm,
+  .statuspill {
+    display: none;
+  }
+
+  .brand h1 {
+    font-size: 15px;
+    letter-spacing: 1px;
+  }
+
+  .brand small {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .logo {
+    font-size: 20px;
+    padding: 7px;
+  }
+
+  /* Buscador y caja de info apilados */
+  .overlay {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .search {
+    width: 100%;
+  }
+
+  .mapinfo {
+    max-width: 100%;
+    width: max-content;
+  }
+
+  /* En móvil se hace zoom con los dedos */
+  .leaflet-control-zoom {
+    display: none;
+  }
+
+  .legend {
+    padding: 6px 8px;
+    line-height: 1.6;
+  }
+
+  .legend div:last-child {
+    display: none;
+  }
+
+  .maptools {
+    bottom: 22px;
+  }
+
+  .chart {
+    height: 100px;
+    gap: 3px;
+  }
+
+  .metric strong {
+    font-size: 17px;
+  }
+
+  .calendar-nav {
+    gap: 4px;
+  }
+
+  .calendar-nav span {
+    min-width: 56px;
+  }
+}
+
+/* =========================================================
+   Móviles muy angostos: ≤ 380px
+   ========================================================= */
+@media (max-width: 380px) {
+  .sec,
+  .content {
+    padding: 10px;
+  }
+
+  .pt {
+    padding: 0 10px;
+  }
+
+  .calendar {
+    gap: 3px;
+  }
+
+  .day {
+    padding: 3px;
+    font-size: 11px;
+  }
+
+  .chartcol span {
+    font-size: 8px;
+  }
+}
+
+/* Celulares en horizontal: el mapa casi a pantalla completa */
+@media (max-height: 480px) and (orientation: landscape) {
+  .maparea {
+    height: 88vh;
+    min-height: 260px;
+  }
+}
+
+/* =========================================================
+   Pantallas táctiles: campos y botones más grandes
+   (16px evita el zoom automático de iOS al escribir)
+   ========================================================= */
+@media (pointer: coarse) {
+  input:not([type="checkbox"]),
+  select {
+    min-height: var(--tap);
+    font-size: 16px;
+  }
+
+  .btn,
+  .search button,
+  .language-toggle {
+    min-height: var(--tap);
+  }
+
+  .language-toggle {
+    min-width: var(--tap);
+  }
+
+  .checkrow {
+    min-height: var(--tap);
+  }
+
+  .checkrow input {
+    width: 22px;
+    height: 22px;
+  }
+
+  .calendar-nav-btn,
+  .maptools button {
+    width: var(--tap);
+    height: var(--tap);
+  }
+
+  .leaflet-bar a {
+    width: 36px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+  }
+
+  .close {
+    min-width: var(--tap);
+    min-height: var(--tap);
+  }
+}
+
+/* Respeta la preferencia de menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+.weather-main {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.weather-main strong {
+  font-size: 42px;
+  line-height: 1;
+}
+
+.weather-main span {
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.weather-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.weather-item {
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid #28384a;
+  border-radius: 6px;
+  background: var(--panel2);
+}
+
+.weather-item small {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.weather-item strong {
+  display: block;
+  margin-top: 4px;
+  font-size: var(--fs-sm);
+  overflow-wrap: anywhere;
+}

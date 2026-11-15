@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090d14">
+  <title data-en="MODIS and VIIRS active fire hotspots">FIREHARMONY</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+  <div class="app">
+
+    <header>
+      <div class="brand">
+        <div class="logo">🔥</div>
+        <div>
+          <h1>FIREHARMONY</h1><small data-en="Active fire hotspots (MODIS and VIIRS sensors)">Focos de incendio activos (sensores MODIS y VIIRS)</small>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span class="statuspill" data-en="EXPLORATORY PROTOTYPE">PROTOTIPO EXPLORATORIO</span>
+        <button type="button" class="language-toggle" id="languageToggle" aria-label="Switch to English"
+          title="Switch to English">EN</button>
+      </div>
+    </header>
+
+    <!-- ========== Panel izquierdo: área y filtros ========== -->
+    <aside class="panel left" aria-label="Área de interés y filtros"
+      data-en-aria-label="Area of interest and filters">
+
+      <section class="acc open" id="accArea">
+        <div class="pt">
+          <button type="button" class="acc-toggle" aria-expanded="true" aria-controls="accAreaBody">
+            <span class="acc-title" data-en="🧭 AREA OF INTEREST">🧭 ÁREA DE INTERÉS</span>
+            <span id="areaStatus">Global</span>
+            <i class="chev" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="acc-body" id="accAreaBody">
+          <div class="sec">
+            <label class="label" for="region" data-en="Reference region">Región de referencia</label>
+            <select id="region">
+              <option value="argentina">🇦🇷 Argentina</option>
+              <option value="custom" data-en="Custom coordinates">Coordenadas personalizadas</option>
+            </select>
+
+            <div class="gap"></div>
+
+            <div class="row">
+              <div><label class="label" for="lat" data-en="Latitude">Latitud</label><input id="lat" type="number" step=".01" value="-27.8">
+              </div>
+              <div><label class="label" for="lon" data-en="Longitude">Longitud</label><input id="lon" type="number" step=".01"
+                  value="-64.3"></div>
+            </div>
+
+            <div class="gap"></div>
+
+            <label class="label" for="radius" data-en="Analysis radius (km)">Radio de análisis (km)</label>
+            <select id="radius">
+              <option value="50">50 km</option>
+              <option value="100" selected>100 km</option>
+              <option value="250">250 km</option>
+              <option value="500">500 km</option>
+              <option value="1000">1000 km</option>
+            </select>
+
+            <div class="gap"></div>
+            <button class="btn primary full" id="nasaFetch" data-en="🛰️ Get live NASA data">🛰️ Consultar datos reales NASA</button>
+            <div id="nasaMessage" class="notice" style="margin-top:8px"
+              data-en="Start the local server and configure your MAP_KEY to query real data.">Iniciá el servidor local y configurá tu MAP_KEY
+              para consultar datos reales.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="accFilters">
+        <div class="pt">
+          <button type="button" class="acc-toggle" aria-expanded="false" aria-controls="accFiltersBody">
+            <span class="acc-title" data-en="SENSOR FILTERS">FILTROS DE SENSOR</span>
+            <i class="chev" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="acc-body" id="accFiltersBody">
+          <div class="sec">
+            <label class="checkrow"><input id="modis" type="checkbox" checked><span
+                data-en="MODIS (Terra / Aqua)"> MODIS (Terra / Aqua)</span></label>
+            <label class="checkrow"><input id="viirs" type="checkbox" checked><span
+                data-en="VIIRS (Suomi NPP / NOAA)"> VIIRS (Suomi NPP / NOAA)</span></label>
+            <label class="label" for="confidence" data-en="Confidence level">Nivel de confianza</label>
+            <select id="confidence">
+              <option value="all" data-en="All levels">Todos los niveles</option>
+              <option value="nominal" data-en="Nominal or higher">Nominal o superior</option>
+              <option value="high" data-en="High only">Solo alto</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección de CSV desactivada. Si la reactivas, restaura también el código de csvFile y
+           downloadSample en scripts.js.
+      <section class="acc" id="accCsv">
+        <div class="pt">
+          <button type="button" class="acc-toggle" aria-expanded="false" aria-controls="accCsvBody">
+            <span class="acc-title">📂 CARGAR DATOS PROPIOS</span>
+            <i class="chev" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="acc-body" id="accCsvBody">
+          <div class="sec">
+            <label class="label" for="csvFile">Importar CSV de focos activos</label>
+            <input id="csvFile" type="file" accept=".csv,text/csv">
+            <div class="gap"></div>
+            <button class="btn full" id="downloadSample">Descargar plantilla CSV</button>
+            <p style="font-size:9px;color:var(--muted);line-height:1.5;margin:9px 0 0">Columnas reconocidas: latitude,
+              longitude, acq_date, satellite, confidence, frp. Los nombres pueden estar en mayúsculas o minúsculas.</p>
+          </div>
+        </div>
+      </section>
+      -->
+    </aside>
+
+    <!-- ========== Mapa ========== -->
+    <main class="maparea">
+      <div id="map"></div>
+      <div class="overlay">
+        <div class="mapinfo" id="mapInfo"><strong>🔥 FIREHARMONY</strong><br><span id="mapDefaultInfo"
+            data-en="Select a region or hotspot on the map.">Seleccioná una región o un foco del mapa.</span></div>
+      </div>
+      <div class="legend">
+        <div><i style="background:#ff554d"></i>VIIRS</div>
+        <div><i style="background:#ffb14a"></i>MODIS</div>
+      </div>
+      <div class="maptools">
+        <button id="centerBtn" title="Ver área" aria-label="Ver área" data-en-title="View area"
+          data-en-aria-label="View area">⌖</button>
+        <button id="allBtn" title="Ver todos" aria-label="Ver todo el mundo" data-en-title="View all"
+          data-en-aria-label="View the whole world">🌎</button>
+      </div>
+    </main>
+
+    <!-- ========== Panel derecho: resumen ========== -->
+    <aside class="panel right" aria-label="Resumen del área" data-en-aria-label="Area summary">
+      <section class="acc open" id="accSummary">
+        <div class="pt">
+          <button type="button" class="acc-toggle" aria-expanded="true" aria-controls="accSummaryBody">
+            <span class="acc-title" data-en="📊 AREA SUMMARY">📊 RESUMEN DEL ÁREA</span>
+            <span id="selectedArea">—</span>
+            <i class="chev" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="acc-body" id="accSummaryBody">
+          <div class="sumgrid">
+            <div class="sumcol">
+              <div class="metrics">
+                <div class="metric"><small data-en="Visible hotspots">Focos visibles</small><strong id="total">—</strong>
+                  <div class="sub" data-en="with current filters">según filtros</div>
+                </div>
+                <div class="metric"><small data-en="Accumulated FRP">FRP acumulada</small><strong id="frp">—</strong>
+                  <div class="sub" data-en="MW · when available">MW · si está disponible</div>
+                </div>
+                <div class="metric"><small data-en="VIIRS detections">Detecciones VIIRS</small><strong id="viirsCount">—</strong>
+                  <div class="sub" data-en="filtered records">registros filtrados</div>
+                </div>
+                <div class="metric"><small data-en="MODIS detections">Detecciones MODIS</small><strong id="modisCount">—</strong>
+                  <div class="sub" data-en="filtered records">registros filtrados</div>
+                </div>
+              </div>
+              <div class="source"><strong>🛰️ MODIS</strong><span class="demo" id="modisStatus" data-en="Demo data">Datos de demo</span></div>
+              <div class="source"><strong>🛰️ VIIRS</strong><span class="demo" id="viirsStatus" data-en="Demo data">Datos de demo</span></div>
+              <div class="source"><strong>🌐 NASA FIRMS</strong><span class="demo" id="apiStatus" data-en="Not queried">Sin consultar</span>
+              </div>
+            </div>
+
+            <div class="sumcol">
+              <div class="risk">
+                <div class="riskhead"><strong data-en="Relative activity in view">Actividad relativa en la vista</strong><strong
+                    id="activityLabel">—</strong></div>
+                <div class="bar">
+                  <div class="fill" id="activityBar"></div>
+                </div>
+                <div class="hint" data-en="A visual indicator relative to the currently loaded data; it is not a risk forecast.">Indicador visual relativo a los datos actualmente cargados; no es una predicción de
+                  riesgo.</div>
+              </div>
+              <div class="note" id="insight" data-en="Demo records let you try the interface.">Los registros de demostración permiten probar la interfaz.</div>
+              <div class="sec"><button class="btn primary full" id="analysisBtn" data-en="View methodology and limitations">Ver metodología y
+                  limitaciones</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="acc open" id="accWeather">
+        <div class="pt">
+          <button type="button" class="acc-toggle" aria-expanded="true" aria-controls="accWeatherBody">
+            <span class="acc-title" data-en="🌤️ WEATHER BOARD">🌤️ CARTELERA DEL CLIMA</span>
+            <span id="weatherStatus" class="demo" role="status" aria-live="polite" data-en="Not queried">Sin consultar</span>
+            <i class="chev" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="acc-body" id="accWeatherBody">
+          <div class="sec">
+            <div class="weather-main">
+              <strong id="weatherTemp">—</strong><span>°C</span>
+            </div>
+            <div class="weather-grid">
+              <div class="weather-item"><small data-en="Humidity">Humedad</small><strong id="weatherHumidity">—</strong></div>
+              <div class="weather-item"><small data-en="Wind">Viento</small><strong id="weatherWind">—</strong></div>
+              <div class="weather-item"><small data-en="Precipitation">Precipitación</small><strong id="weatherPrecip">—</strong></div>
+            </div>
+            <div class="hint" id="weatherLocation" data-en="Using the selected area's coordinates.">Usando las coordenadas del área seleccionada.</div>
+            <div class="gap"></div>
+            <button type="button" class="btn full" id="weatherRefresh" data-en="Refresh weather">Actualizar clima</button>
+          </div>
+        </div>
+      </section>
+    </aside>
+
+    <!-- ========== Paneles inferiores ========== -->
+    <section class="bottom">
+
+      <section class="bp acc open" id="accCalendar">
+        <div class="pt calendarhead">
+          <button type="button" class="acc-toggle" aria-expanded="true" aria-controls="accCalendarBody">
+            <span class="acc-title" data-en-html="📅 ACTIVITY CALENDAR">📅 CALENDARIO<span class="hide-sm"> DE ACTIVIDAD</span></span>
+            <i class="chev" aria-hidden="true"></i>
+          </button>
+          <div class="calendar-nav">
+            <button type="button" class="calendar-nav-btn" id="calendarPrev" aria-label="Mes anterior"
+              data-en-aria-label="Previous month">‹</button>
+            <span id="calendarTitle">—</span>
+            <button type="button" class="calendar-nav-btn" id="calendarNext" aria-label="Mes siguiente"
+              data-en-aria-label="Next month">›</button>
+          </div>
+        </div>
+        <div class="acc-body" id="accCalendarBody">
+          <div class="content">
+            <div id="calendarStatus" class="calendar-status" role="status" aria-live="polite"
+              data-en="Loading historical activity…">Cargando actividad histórica…</div>
+            <div id="calendar" class="calendar"></div>
+            <div class="hint" data-en="Color intensity represents the number of daily detections in the 2025 historical CSV files. MODIS and VIIRS filters also apply here.">La intensidad de color representa la cantidad de detecciones por día en los CSV
+              históricos de 2025. Los filtros MODIS y VIIRS también aplican aquí.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bp acc" id="accChart">
+        <div class="pt">
+          <button type="button" class="acc-toggle" aria-expanded="false" aria-controls="accChartBody">
+            <span class="acc-title" data-en="📈 MONTHLY ACTIVITY">📈 ACTIVIDAD POR MES</span>
+            <span id="chartYear">—</span>
+            <i class="chev" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="acc-body" id="accChartBody">
+          <div class="content">
+            <div class="chart" id="monthlyChart"></div>
+            <div class="hint" data-en="Detection count; this does not necessarily equal the number of unique fires.">Conteo de detecciones; no equivale necesariamente al número de incendios únicos.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bp acc" id="accSources">
+        <div class="pt">
+          <button type="button" class="acc-toggle" aria-expanded="false" aria-controls="accSourcesBody">
+            <span class="acc-title" data-en="🧪 SOURCES AND HARMONIZATION">🧪 FUENTES Y ARMONIZACIÓN</span>
+            <i class="chev" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="acc-body" id="accSourcesBody">
+          <div class="content sourcegrid">
+            <div class="sourcecard"><strong>MODIS</strong>
+              <p data-en="Active-fire product with a nominal resolution of about 1 km.">Producto de focos activos con resolución nominal cercana a 1 km.</p>
+            </div>
+            <div class="sourcecard"><strong>VIIRS</strong>
+              <p data-en="Active-fire detections with a nominal resolution of about 375 m.">Detecciones de focos activos con resolución nominal cercana a 375 m.</p>
+            </div>
+            <div class="sourcecard"><strong data-en="Harmonization">Armonización</strong>
+              <p data-en="Normalize dates, coordinates, sensor names, and comparable fields.">Normalizar fechas, coordenadas, nombres de sensor y campos comparables.</p>
+            </div>
+            <div class="sourcecard"><strong data-en="Caution">Precaución</strong>
+              <p data-en="Detections close in space and time may correspond to the same event.">Las detecciones cercanas en espacio y tiempo pueden corresponder al mismo evento.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </section>
+  </div>
+
+  <!-- ========== Modal de metodología ========== -->
+  <div class="modal" id="analysisModal">
+    <div class="modalcard">
+      <div class="modalhead"><strong data-en="Methodology and limitations">Metodología y limitaciones</strong><button class="close" id="closeAnalysis"
+          aria-label="Cerrar" data-en-aria-label="Close">×</button></div>
+      <div class="modalbody">
+        <p data-en-html="<strong>Objective:</strong> explore temporal and spatial patterns of active-fire detections from MODIS and VIIRS."><strong>Objetivo:</strong> explorar patrones temporales y espaciales de focos activos detectados por MODIS y
+          VIIRS.</p>
+        <p data-en-html="<strong>What it can do:</strong> automatically query NASA FIRMS for the day's detections over Argentina, or request a one-day query for the selected coordinates, radius, and MODIS/VIIRS sensors. It plots detections on the map, filters by sensor and confidence, and calculates visible counts and FRP. It displays a calendar from local MODIS/VIIRS CSV files for 2025 and a monthly chart for loaded 2025 detections. With Meteomatics credentials configured, it shows current temperature, humidity, wind speed, and one-hour precipitation for the selected point.">
+          <strong>Qué puede hacer:</strong> consultar automáticamente en NASA FIRMS las detecciones del día sobre
+          Argentina, o pedir una consulta de un día para las coordenadas, el radio y los sensores MODIS/VIIRS
+          seleccionados. Ubica las detecciones en el mapa, permite filtrarlas por sensor y confianza, y calcula
+          conteos visibles y FRP. Muestra un calendario basado en los CSV locales MODIS/VIIRS de 2025 y un gráfico
+          mensual para detecciones cargadas. Muestra temperatura, humedad, viento y precipitación de una hora para el punto seleccionado.</p>
+        <p data-en-html="<strong>Limitations:</strong> satellite hotspots are detections, not confirmation of unique fires; the analysis circle is only a reference and the FIRMS area is approximated. Weather is current conditions for one point, not a forecast or an area-wide measurement. Historical calendar data is limited to the local 2025 CSV files, and CSV upload is currently disabled. Relative activity is not a fire-risk forecast.">
+          <strong>Limitaciones:</strong> los focos satelitales son detecciones, no una confirmación de incendios
+          únicos; el círculo de análisis es orientativo y el área consultada a FIRMS es aproximada. El clima muestra
+          condiciones actuales para un punto, no un pronóstico ni una medición de toda el área. El calendario
+          histórico se limita a los CSV locales de 2025 y la carga de CSV está desactivada. La actividad relativa
+          no es un pronóstico de riesgo de incendio.</p>
+        <p data-en-html="<strong>Responsible harmonization:</strong> preserve the original source and sensor; normalize dates, coordinates, and fields; document differences in resolution, confidence, and revisit frequency; and avoid counting coincident detections as independent fires."><strong>Armonización responsable:</strong> conservar la fuente y el sensor originales; normalizar fechas,
+          coordenadas y campos; documentar diferencias de resolución, confianza y frecuencia de paso; y evitar sumar
+          detecciones coincidentes como si fueran incendios independientes.</p>
+        <p data-en-html="<strong>Connection:</strong> the local server keeps NASA FIRMS and Meteomatics credentials out of the HTML. The current NASA query requests today's data for one day; the historical calendar reads the local 2025 CSV files.">
+          <strong>Conexión:</strong> el servidor local mantiene las credenciales de NASA FIRMS y Meteomatics fuera
+          del HTML. La consulta NASA actual solicita los datos de hoy para un día; el calendario histórico lee los
+          CSV locales de 2025.
+        </p>
+        <p><a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noopener" style="color:#ffb16d"
+            data-en="Open NASA FIRMS ↗">Abrir
+            NASA FIRMS ↗</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
+  <!-- Menús expandibles: solo funcionan en pantallas ≤ 860px (en escritorio todo queda abierto) -->
+  <script>
+    (() => {
+      const mq = window.matchMedia("(max-width: 860px)");
+      const sections = document.querySelectorAll(".acc");
+
+      const sync = () => {
+        sections.forEach((sec) => {
+          const btn = sec.querySelector(".acc-toggle");
+          if (!btn) return;
+          btn.disabled = !mq.matches;
+          btn.setAttribute(
+            "aria-expanded",
+            mq.matches ? String(sec.classList.contains("open")) : "true"
+          );
+        });
+      };
+
+      sections.forEach((sec) => {
+        const btn = sec.querySelector(".acc-toggle");
+        if (!btn) return;
+        btn.addEventListener("click", () => {
+          if (!mq.matches) return;
+          const open = sec.classList.toggle("open");
+          btn.setAttribute("aria-expanded", String(open));
+        });
+      });
+
+      if (mq.addEventListener) mq.addEventListener("change", sync);
+      else mq.addListener(sync);
+      sync();
+
+      // En móvil, tocar la caja de información del mapa la expande o la compacta
+      const info = document.getElementById("mapInfo");
+      if (info) info.addEventListener("click", () => info.classList.toggle("expanded"));
+    })();
+  </script>
+</body>
+
+</html>
