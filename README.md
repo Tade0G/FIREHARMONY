@@ -1,4 +1,6 @@
-🔥 FIREHARMONY
+# 🔥 FIREHARMONY
+
+🌐 **Idioma:** Español | [English](README.en.md)
 
 <h3 align="center">Monitoreo satelital de incendios mediante integración de datos MODIS y VIIRS</h3>
 
@@ -162,7 +164,8 @@ El flujo de trabajo propuesto para la plataforma es:
 │
 ├── requirements.txt
 ├── .gitignore
-└── README.md
+├── README.md
+└── README.en.md
 ```
 
 *La estructura se ajustará a la organización definitiva del código.*
