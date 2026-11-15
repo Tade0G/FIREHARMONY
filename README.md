@@ -189,7 +189,7 @@ Busca combinar observación satelital, ciencia de datos y visualización interac
 ---
 
 <p align="center">
-  🌳 <strong>MONTE ALERTA</strong>
+  🌳 <strong>FIREHARMONY</strong>
   <br>
   <em>Datos que ayudan a comprender y proteger nuestro territorio.</em>
 </p>
