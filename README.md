@@ -133,7 +133,7 @@ El flujo de trabajo propuesto para la plataforma es:
 ## 🚀 Acceso a la aplicación
 
 <p align="center">
-  <a href="URL_PUBLICA_DE_LA_APLICACION">
+  <a href="https://fire-harmony-tres-2b-santiago-del-estero.onrender.com/">
     <img src="https://img.shields.io/badge/ABRIR-🔥 FIREHARMONY-238636?style=for-the-badge&logo=googleearth&logoColor=white" alt="Abrir 🔥 FIREHARMONY">
   </a>
 </p>
