@@ -1,101 +1,101 @@
 # 🔥 FIREHARMONY
 
-🌐 **Idioma:** Español | [English](README.en.md)
+🌐 **Language:** [Español](README.md) | English
 
-<h3 align="center">Monitoreo satelital de incendios mediante integración de datos MODIS y VIIRS</h3>
+<h3 align="center">Satellite fire monitoring through the integration of MODIS and VIIRS data</h3>
 
 <p align="center">
-  <strong>Tecnología, datos y territorio para comprender y monitorear la actividad de fuego.</strong>
+  <strong>Technology, data, and territory to understand and monitor fire activity.</strong>
 </p>
 
 <p align="center">
-  🛰️ Observación satelital · 🌎 Análisis geoespacial · 🔥 Monitoreo ambiental
-</p>
-
----
-
-## 🌎 Explorador satelital global
-
-🔥 FIREHARMONY es una plataforma de análisis y monitoreo satelital orientada a la visualización y el estudio de detecciones térmicas asociadas a actividad de fuego.
-
-El proyecto integra información de los sensores **MODIS y VIIRS**, pertenecientes a los sistemas de observación de la Tierra de la NASA, para facilitar el análisis espacial y temporal de las detecciones.
-
-<p align="center">
-  <img src="/data/imagenes/imagen_Pagina.jpeg" alt="Mapa global de FIREHARMONY" width="100%">
-</p>
-
-<p align="center">
-  <em>Vista del mapa de la aplicación FIREHARMONY.</em>
+  🛰️ Satellite observation · 🌎 Geospatial analysis · 🔥 Environmental monitoring
 </p>
 
 ---
 
-## 🎯 Objetivos del proyecto
+## 🌎 Global satellite explorer
 
-- Integrar información satelital proveniente de MODIS y VIIRS.
-- Normalizar y organizar registros de diferentes sensores.
-- Visualizar detecciones térmicas sobre un mapa interactivo.
-- Analizar la distribución geográfica y evolución temporal de la actividad de fuego.
-- Comparar información proveniente de diferentes plataformas satelitales.
-- Identificar concentraciones y posibles eventos relacionados.
-- Facilitar la exploración y exportación de datos.
+🔥 FIREHARMONY is a satellite analysis and monitoring platform focused on visualizing and studying thermal detections associated with fire activity.
 
-## 🛰️ Fuentes de datos
+The project integrates data from the **MODIS and VIIRS** sensors, part of NASA's Earth-observation systems, to support spatial and temporal analysis of detections.
 
-La fuente principal de información es **NASA FIRMS (Fire Information for Resource Management System)**.
+<p align="center">
+  <img src="/data/imagenes/imagen_Pagina.jpeg" alt="FIREHARMONY global map" width="100%">
+</p>
 
-| Sensor | Descripción |
+<p align="center">
+  <em>Map view from the FIREHARMONY application.</em>
+</p>
+
+---
+
+## 🎯 Project objectives
+
+- Integrate satellite data from MODIS and VIIRS.
+- Normalize and organize records from different sensors.
+- Display thermal detections on an interactive map.
+- Analyze the geographic distribution and temporal evolution of fire activity.
+- Compare data from different satellite platforms.
+- Identify clusters and potential related events.
+- Support data exploration and export.
+
+## 🛰️ Data sources
+
+The main data source is **NASA FIRMS (Fire Information for Resource Management System)**.
+
+| Sensor | Description |
 |---|---|
-| MODIS | Instrumentos a bordo de los satélites Terra y Aqua. |
-| VIIRS | Instrumentos a bordo de Suomi-NPP, NOAA-20 y NOAA-21. |
+| MODIS | Instruments aboard the Terra and Aqua satellites. |
+| VIIRS | Instruments aboard Suomi-NPP, NOAA-20, and NOAA-21. |
 
-La integración considera las diferencias entre los sensores, sus características de observación y sus períodos de disponibilidad.
+The integration accounts for differences between the sensors, their observation characteristics, and their periods of availability.
 
-## 🧠 Metodología de armonización
+## 🧠 Harmonization methodology
 
-El proyecto contempla un proceso de integración de datos que permite organizar registros provenientes de diferentes sensores.
+The project includes a data integration process for organizing records from different sensors.
 
-Las etapas de trabajo incluyen:
+The workflow includes:
 
-1. **Adquisición:** obtención de registros satelitales.
-2. **Preparación:** limpieza y validación de los datos.
-3. **Normalización:** unificación de formatos y estructuras.
-4. **Integración:** conservación de la información de origen de cada sensor.
-5. **Análisis:** exploración espacial y temporal.
-6. **Visualización:** representación de resultados mediante mapas y gráficos.
+1. **Acquisition:** collecting satellite records.
+2. **Preparation:** cleaning and validating the data.
+3. **Normalization:** unifying formats and structures.
+4. **Integration:** preserving each sensor's source information.
+5. **Analysis:** exploring spatial and temporal patterns.
+6. **Visualization:** presenting results through maps and charts.
 
-La armonización de formatos y estructuras no implica por sí misma una calibración física entre sensores.
+Harmonizing formats and structures does not, by itself, imply physical calibration between sensors.
 
-## 📊 Funcionalidades de la plataforma
+## 📊 Platform features
 
-La propuesta de 🔥 FIREHARMONY contempla:
+The 🔥 FIREHARMONY project envisions:
 
-- 🌍 Visualización geográfica de detecciones.
-- 🛰️ Diferenciación de registros MODIS y VIIRS.
-- 📅 Exploración por períodos temporales.
-- 📍 Análisis de distribución espacial.
-- 📈 Comparación entre sensores.
-- 🔥 Análisis de potencia radiativa del fuego (FRP).
-- 🧩 Estudio de concentraciones y posibles eventos relacionados.
-- 📥 Exportación de datos para análisis posteriores.
+- 🌍 Geographic visualization of detections.
+- 🛰️ Distinguishing MODIS and VIIRS records.
+- 📅 Exploring data by time period.
+- 📍 Analyzing spatial distribution.
+- 📈 Comparing sensors.
+- 🔥 Analyzing fire radiative power (FRP).
+- 🧩 Studying clusters and potential related events.
+- 📥 Exporting data for further analysis.
 
-*La disponibilidad de cada funcionalidad depende de su implementación y conexión con los datos reales.*
+*Feature availability depends on implementation and connection to real data.*
 
-## 🛠️ Tecnologías utilizadas
+## 🛠️ Technologies
 
-| Tecnología | Aplicación |
+| Technology | Use |
 |---|---|
-| Python | Procesamiento y análisis de datos. |
-| METEOMATICS | API meteorológica. |
-| Pandas | Manipulación y preparación de datos. |
-| Plotly | Visualizaciones interactivas. |
-| Leaflet | Visualización cartográfica. |
-| NASA FIRMS | Fuente de información satelital. |
-| Git y GitHub | Control de versiones y documentación. |
+| Python | Data processing and analysis. |
+| meteomatics | weather API. |
+| Pandas | Data manipulation and preparation. |
+| Plotly | Interactive visualizations. |
+| Leaflet | Map visualization. |
+| NASA FIRMS | Satellite data source. |
+| Git and GitHub | Version control and documentation. |
 
-## 🏗️ Arquitectura general
+## 🏗️ Overall architecture
 
-El flujo de trabajo propuesto para la plataforma es:
+The proposed platform workflow is:
 
 ```text
         NASA FIRMS
@@ -106,41 +106,42 @@ El flujo de trabajo propuesto para la plataforma es:
       |             |
       +------+------+
              |
-      Adquisición de datos
+       Data acquisition
              |
-      Procesamiento y limpieza
+   Processing and cleaning
              |
-       Normalización
+       Normalization
              |
-     Integración de registros
+      Record integration
              |
-      Motor de análisis
-             |  
-        Aplicación     
-        interactiva     
+       Analysis engine
+             |      
+        Interactive
              |
-     Visualización y análisis
+        Application
+             |
+   Visualization and analysis
 ```
 
-## ⚠️ Consideraciones importantes
+## ⚠️ Important considerations
 
-- Una detección satelital representa una anomalía térmica y no necesariamente un incendio individual confirmado.
-- Varias detecciones cercanas en espacio y tiempo pueden corresponder a un mismo evento.
-- MODIS y VIIRS poseen características técnicas y resoluciones diferentes.
-- Los resultados dependen de la calidad, disponibilidad y cobertura de los datos de origen.
-- La plataforma tiene fines de monitoreo y análisis; no reemplaza los sistemas oficiales de emergencia ni la verificación en terreno.
+- A satellite detection represents a thermal anomaly and does not necessarily confirm an individual fire.
+- Multiple detections close in space and time may correspond to the same event.
+- MODIS and VIIRS have different technical characteristics and resolutions.
+- Results depend on the quality, availability, and coverage of the source data.
+- The platform is intended for monitoring and analysis; it does not replace official emergency systems or on-the-ground verification.
 
-## 🚀 Acceso a la aplicación
+## 🚀 Open the application
 
 <p align="center">
   <a href="https://fire-harmony-tres-2b-santiago-del-estero.onrender.com/">
-    <img src="https://img.shields.io/badge/ABRIR-🔥 FIREHARMONY-238636?style=for-the-badge&logo=googleearth&logoColor=white" alt="Abrir 🔥 FIREHARMONY">
+    <img src="https://img.shields.io/badge/OPEN-🔥 FIREHARMONY-238636?style=for-the-badge&logo=googleearth&logoColor=white" alt="Open 🔥 FIREHARMONY">
   </a>
 </p>
 
-*Reemplazar el enlace anterior por la dirección pública de la aplicación cuando esté publicada.*
+*Replace the link above with the public application URL when it is available.*
 
-## 📂 Estructura del repositorio
+## 📂 Repository structure
 
 ```text
 🔥FIREHARMONY/
@@ -164,29 +165,27 @@ El flujo de trabajo propuesto para la plataforma es:
 └── README.en.md
 ```
 
-*La estructura se ajustará a la organización definitiva del código.*
+*The structure may change as the codebase is finalized.*
 
-## 🌱 Impacto y propósito
+## 🌱 Impact and purpose
 
-FIREHARMONY nace con una identidad vinculada a Argentina con una perspectiva tecnológica de alcance global.
+FIREHARMONY has an identity rooted in Argentina and a global technological outlook.
 
-Busca combinar observación satelital, ciencia de datos y visualización interactiva para facilitar la comprensión de la actividad térmica y aportar herramientas para el análisis ambiental.
-
+It aims to combine satellite observation, data science, and interactive visualization to support understanding of thermal activity and provide tools for environmental analysis.
 
 📍 Santiago del Estero, Argentina.
 
-## 🔗 Fuentes oficiales
+## 🔗 Official sources 
 
 - [NASA FIRMS](https://firms.modaps.eosdis.nasa.gov/)
 - [NASA Earthdata](https://www.earthdata.nasa.gov/)
 - [NASA MODIS](https://modis.gsfc.nasa.gov/)
 - [NASA VIIRS](https://www.nesdis.noaa.gov/our-satellites/joint-polar-satellite-system)
 - [METEOMATICS](https://www.meteomatics.com/)
-
 ---
 
 <p align="center">
-  🌳 <strong>FIREHARMONY</strong>
+  🌳 <strong>FIREHAYMONY</strong>
   <br>
-  <em>Datos que ayudan a comprender y proteger nuestro territorio.</em>
+  <em>Data that helps us understand and protect our territory.</em>
 </p>
