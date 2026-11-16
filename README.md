@@ -185,7 +185,7 @@ It aims to combine satellite observation, data science, and interactive visualiz
 ---
 
 <p align="center">
-  🌳 <strong>FIREHAYMONY</strong>
+  🌳 <strong>FIREHARMONY</strong>
   <br>
   <em>Data that helps us understand and protect our territory.</em>
 </p>
