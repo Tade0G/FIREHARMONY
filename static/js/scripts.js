@@ -9,7 +9,7 @@ console.log("FireHarmony v1.0.0 - MODIS + VIIRS - 2024-06-10");
 
 const $ = (id) => document.getElementById(id);
 let currentLanguage =
-  localStorage.getItem("fireharmony-language") === "en" ? "en" : "es";
+  localStorage.getItem("fireharmony-language") === "es" ? "es" : "en";
 const monthNamesByLanguage = {
   es: [
     "Ene",
