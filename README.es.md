@@ -1,6 +1,6 @@
 # 🔥 FIREHARMONY
 
-🌐 **Idioma:** Español | [English](README.en.md)
+🌐 **Idioma:** Español | [English](README.md)
 
 <h3 align="center">Monitoreo satelital de incendios mediante integración de datos MODIS y VIIRS</h3>
 
@@ -130,6 +130,17 @@ El flujo de trabajo propuesto para la plataforma es:
 - Los resultados dependen de la calidad, disponibilidad y cobertura de los datos de origen.
 - La plataforma tiene fines de monitoreo y análisis; no reemplaza los sistemas oficiales de emergencia ni la verificación en terreno.
 
+## 💻 Ejecutar localmente
+
+Se requiere Python 3.10 o posterior. Desde la carpeta del proyecto, instalá las dependencias e iniciá el servidor:
+
+```bash
+python -m pip install -r requirements.txt
+python app.py
+```
+
+Abrí [http://127.0.0.1:5000](http://127.0.0.1:5000). Para configurar las credenciales de NASA FIRMS y del servicio meteorológico, consultá la [guía de instalación](docs/guia-instalacion.md).
+
 ## 🚀 Acceso a la aplicación
 
 <p align="center">
@@ -161,7 +172,7 @@ El flujo de trabajo propuesto para la plataforma es:
 ├── requirements.txt
 ├── .gitignore
 ├── README.md
-└── README.en.md
+└── README.es.md
 ```
 
 *La estructura se ajustará a la organización definitiva del código.*
