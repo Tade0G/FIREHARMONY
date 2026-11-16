@@ -68,7 +68,7 @@ Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser. To stop the
 
 ## 5. Query data
 
-- To query fires, configure `FIRMS_MAP_KEY`, select an area, date, 1–5 days, and MODIS or VIIRS sensors, then select **Get live NASA data**.
+- To query fires, configure `FIRMS_MAP_KEY`, select an area and MODIS or VIIRS sensors, then select **Get live NASA data**.
 - To query weather, configure the Meteomatics credentials and use the weather section.
 - Without the corresponding credentials, the application can open, but those live queries will not be available.
 

@@ -68,7 +68,7 @@ Abrí [http://127.0.0.1:5000](http://127.0.0.1:5000) en el navegador. Para deten
 
 ## 5. Consultar datos
 
-- Para consultar incendios, configurá `FIRMS_MAP_KEY`, elegí el área, la fecha, entre 1 y 5 días y los sensores MODIS o VIIRS; luego presioná **Consultar datos reales NASA**.
+- Para consultar incendios, configurá `FIRMS_MAP_KEY`, elegí el área y los sensores MODIS o VIIRS; luego presioná **Consultar datos reales NASA**.
 - Para consultar el clima, configurá las credenciales de Meteomatics y usá la sección del clima.
 - Sin las credenciales correspondientes, la aplicación puede abrirse, pero esas consultas reales no estarán disponibles.
 
